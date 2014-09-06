@@ -226,10 +226,135 @@ def index():
 파이ㅌ선 코드에다 html을 입혀줄 디자이너는 몸값 겁~나 높...
 
 그래서 template을 활용해서 디자인과 코드를 분리해야 한다.
-우리가 사용하는 프레임웤은 flask이
+우리가 사용하는 프레임웤은 flask이고
 flask는 jinja2 template을 사용하고 있다.
 그래서 테스트도 flask에 좀더 적합한 flask-test를 사용하도록
 refactoring 하기로 한다.
 refactoring은 test가 성공한 상태에서 해야 하므로
 test Failure가 없는 지 확인하고 commit을 한 다음 refactoring을 하기로 한다.
+
+(env)[base]19:19:19-cheon~/work/InnoMVA (master)$ python app-test.py
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.011s
+
+OK
+
+(env)[base]19:19:27-cheon~/work/InnoMVA (master)$ git commit -am "홈페이지 헤더 추가"
+[master 3de19f9] 홈페이지 헤더 추가
+ 1 file changed, 7 insertions(+)
+
+먼저 app-test.py에서 flask test를 사용하도록 한다.
+
+[...]
++ from flask.ext.testing import TestCase
+
+- class BasicTestCase(unittest.TestCase):
++ class BasicTestCase(TestCase):
+[...]
+
+(env)[base]19:19:35-cheon~/work/InnoMVA (master)$ python app-test.py
+Traceback (most recent call last):
+  File "app-test.py", line 4, in <module>
+    from flask.ext.testing import TestCase
+  File "/home/cheon/work/InnoMVA/env/local/lib/python2.7/site-packages/flask/exthook.py", line 87, in load_module
+    raise ImportError('No module named %s' % fullname)
+ImportError: No module named flask.ext.testing
+
+
+플라스크 테스트를 깔아야 되네...
+(env)[base]19:25:45-cheon~/work/InnoMVA (master)$ pip install flask-testing
+Downloading/unpacking flask-testing
+  Downloading Flask-Testing-0.4.2.tar.gz (40kB): 40kB downloaded
+[...]
+
+(env)[base]19:27:13-cheon~/work/InnoMVA (master)$ python app-test.py
+Traceback (most recent call last):
+  File "app-test.py", line 15, in <module>
+    unittest.main()
+ [...]
+  File "/home/cheon/work/InnoMVA/env/local/lib/python2.7/site-packages/flask_testing/utils.py", line 82, in create_app
+    raise NotImplementedError
+NotImplementedError
+
+헐~
+할 수 없이 메뉴얼을 봤더니...(https://pythonhosted.org/Flask-Testing/)
+create_app() 이란 놈을 해 줘야 flask testing을 할 수가 있군.
+
+You must specify the create_app method, which should return a Flask instance:
+
+from flask import Flask
+from flask.ext.testing import TestCase
+
+class MyTest(TestCase):
+
+    def create_app(self):
+
+        app = Flask(__name__)
+        app.config['TESTING'] = True
+        return app
+
+If you don’t define create_app a NotImplementedError will be raised.
+
+메뉴얼이 시키는 대로 app-test.py에 create_app()을 정의해 주고
+(env)[base]19:34:48-cheon~/work/InnoMVA (master)$ python app-test.py
+Traceback (most recent call last):
+ [...]
+  File "/home/cheon/work/InnoMVA/env/local/lib/python2.7/site-packages/flask_testing/utils.py", line 97, in _pre_setup
+    self.app = self.create_app()
+  File "app-test.py", line 8, in create_app
+    app = Flask(__name__)
+NameError: global name 'Flask' is not defined
+
+헐~헐~ Flask도 import 해야하고...
+해 줄거 다 한 다음
+(env)[base]20:12:56-cheon~/work/InnoMVA (master)$ python app-test.py
+.E
+======================================================================
+ERROR: test_use_template (__main__.BasicTestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "app-test.py", line 23, in test_use_template
+    self.assert_template_used('home.html')
+  File "/home/cheon/work/InnoMVA/env/local/lib/python2.7/site-packages/flask_testing/utils.py", line 159, in assertTemplateUsed
+    raise RuntimeError("Signals not supported")
+RuntimeError: Signals not supported
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.014s
+
+FAILED (errors=1)
+
+엥? 이건 또 멍미?
+겁나 구글링 한 다음
+(env)[base]20:14:37-cheon~/work/InnoMVA (master)$ pip install blinker
+Downloading/unpacking blinker
+  Downloading blinker-1.3.tar.gz (91kB): 91kB downloaded
+  Running setup.py (path:/home/cheon/work/InnoMVA/env/build/blinker/setup.py) egg_info for package blinker
+
+Installing collected packages: blinker
+  Running setup.py install for blinker
+
+Successfully installed blinker
+Cleaning up...
+(env)[base]20:17:16-cheon~/work/InnoMVA (master)$ python app-test.py
+.F
+======================================================================
+FAIL: test_use_template (__main__.BasicTestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "app-test.py", line 23, in test_use_template
+    self.assert_template_used('home.html')
+  File "/home/cheon/work/InnoMVA/env/local/lib/python2.7/site-packages/flask_testing/utils.py", line 164, in assertTemplateUsed
+    raise AssertionError("template %s not used" % name)
+AssertionError: template home.html not used
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.013s
+
+FAILED (failures=1)
+
+아싸! 원하는 failure 도출 성공.
+수많은 삽질로 뭐가 어찌 됐는지 어리둥절한데 요점은 blink를 설치해야 template rendering을 테스트할 수 잇다는 사실
+복잡한 과정이 있었고 결과가 나왔으므로 커밋 한번 해주기로 한다.
 
