@@ -100,8 +100,8 @@ env 디렉토리에는 python 프로그램이 들어있으므로 버전관리에
 + *.pyc
 + .idea
 
-(env)[base]17:08:24-cheon~/work/InnoMVA (master)$ git add .
-(env)[base]17:08:28-cheon~/work/InnoMVA (master)$ git st
+(env)[base]17:11:29-cheon~/work/InnoMVA (master)$ git add .
+(env)[base]17:11:31-cheon~/work/InnoMVA (master)$ git status
 On branch master
 
 Initial commit
@@ -110,18 +110,119 @@ Changes to be committed:
   (use "git rm --cached <file>..." to unstage)
 
 	new file:   .gitignore
-	new file:   .idea/.name
-	new file:   .idea/InnoMVA.iml
-	new file:   .idea/encodings.xml
-	new file:   .idea/misc.xml
-	new file:   .idea/modules.xml
-	new file:   .idea/scopes/scope_settings.xml
-	new file:   .idea/vcs.xml
-	new file:   .idea/workspace.xml
 	new file:   README
 	new file:   app-test.py
 	new file:   app.py
 
-(env)[base]17:08:30-cheon~/work/InnoMVA (master)$
+우리가 작성한 파일이 커밋을 기다리고 있다.
+커밋한 다음 로그를 확인하고 육신의 건강을 위해 잠시 서성이기로 한다.
+
+(env)[base]17:11:32-cheon~/work/InnoMVA (master)$ git commit -m "테스트 추진 홈페이지 개통되었슈~"
+[master (root-commit) 00404ea] 테스트 추진 홈페이지 개통되었슈~
+ 4 files changed, 154 insertions(+)
+ create mode 100644 .gitignore
+ create mode 100644 README
+ create mode 100644 app-test.py
+ create mode 100644 app.py
+(env)[base]17:14:19-cheon~/work/InnoMVA (master)$ git log
+commit 00404eaf1497ed646d3dc7e73a31460091f4510b
+Author: kecheon <kecheon@gmail.com>
+Date:   Sat Sep 6 17:14:19 2014 +0900
+
+    테스트 추진 홈페이지 개통되었슈~
+
+
+
+
+자 이제 앞의 오류를 고쳐보자.
+
+[...]
+@app.route('/')
+def index():
+    return u"InnoMVA: 주식회사 이노지투비"
+[...]
+
+(env)[base]18:36:53-cheon~/work/InnoMVA (master)$ python app-test.py
+Traceback (most recent call last):
+  File "app-test.py", line 2, in <module>
+    from app import app
+  File "/home/cheon/work/InnoMVA/app.py", line 6
+SyntaxError: Non-ASCII character '\xec' in file /home/cheon/work/InnoMVA/app.py on line 6, but no encoding declared; see http://www.python.org/peps/pep-0263.html for details
+
+엥? 이 머꼬?
+아항~ 한글이 제대로 처리되지 못했네...
+
+app.py 맨 앞에다가
++ #-*-coding:utf8-*-
+
+(env)[base]18:41:06-cheon~/work/InnoMVA (master)$ python app-test.py
+/usr/lib/python2.7/unittest/case.py:505: UnicodeWarning: Unicode equal comparison failed to convert both arguments to Unicode - interpreting them as being unequal
+  if not first == second:
+F
+======================================================================
+FAIL: test_landing_page (__main__.BasicTestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "app-test.py", line 12, in test_landing_page
+    self.assertEqual(response.data, u"InnoMVA: 주식회사 이노지투비")
+AssertionError: 'InnoMVA: \xec\xa3\xbc\xec\x8b\x9d\xed\x9a\x8c\xec\x82\xac \xec\x9d\xb4\xeb\x85\xb8\xec\xa7\x80\xed\x88\xac\xeb\xb9\x84' != u'InnoMVA: \uc8fc\uc2dd\ud68c\uc0ac \uc774\ub178\uc9c0\ud22c\ube44'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.013s
+
+FAILED (failures=1)
+
+헉! 니 왜그냐?
+
+$ vi env/lib/python2.7/site.py
+
+525 def setencoding():
+526     """Set the string encoding used by the Unicode implementation.  The
+527     default is 'ascii', but if you're willing to experiment, you can
+528     change this."""
+529    - encoding = "ascii" # Default value set by _PyUnicode_Init()
+529    + encoding = "utf8" # Default value set by _PyUnicode_Init()
+530     if 0:
+531         # Enable to support locale aware default string encodings.
+532         import locale
+
+이렇게 파이ㅌ선 환경을 바꿔주고 다시 테스트
+
+(env)[base]18:44:27-cheon~/work/InnoMVA (master)$ python app-test.py
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.011s
+
+OK
+
+아싸!
+이제 홈페이지가 뭔가가 나온다 얘기니 확인!
+웹브라우저 불여시를 열고 주소창에 http://localhost:5000
+
+Unable to connect
+
+Firefox can't establish a connection to the server at localhost:5000.
+
+음마? 요 여시 잠 보소잉,  나 이런거 써넣은적 없는디~
+아!
+
+(env)[base]18:45:24-cheon~/work/InnoMVA (master)$ python app.py
+ * Running on http://127.0.0.1:5000/
+
+요로코롬 웹서버를 구동혀야 제대로 나오제...
+흠흠! 조아부렀어.
+
+근데 모양이 쪼까 허섭스럽구마이~
+요즘은 속보다 겉이 우선인게
+위치도 잡고 색칠도 해야겠는데,
+웹디자이너를 데려오면 좋기는 하겠지만 돈이 들고,
+돈들여 데려와도
+
+@app.route('/')
+def index():
+    return u"InnoMVA: 주식회사 이노지투비"
+
+여기다 어떻게 디자인을 입힌다냐?
+파이ㅌ선 코드에다 html을 입혀줄 디자이너는 몸값 겁~나 높...
 
 
