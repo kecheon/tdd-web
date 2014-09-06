@@ -358,3 +358,132 @@ FAILED (failures=1)
 수많은 삽질로 뭐가 어찌 됐는지 어리둥절한데 요점은 blink를 설치해야 template rendering을 테스트할 수 잇다는 사실
 복잡한 과정이 있었고 결과가 나왔으므로 커밋 한번 해주기로 한다.
 
+이제 home.html 이란 템플릿을 사용하도록 코딩하면 된다.
+template은 여러개 생길 것이고 디자이너가 이용할 파일들이므로 별도의 디렉토리에 두기로 한다.
+$ mkdir templates
+$ cd templates
+$ touch home.html
+
+home.html 의 내용을 집어옇고 테스트 시행하니
+
+(env)[base]21:27:21-cheon~/work/InnoMVA (master)$ python app-test.py
+F.
+======================================================================
+FAIL: test_landing_page (__main__.BasicTestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "app-test.py", line 17, in test_landing_page
+    self.assertEqual(response.data, u"InnoMVA: 주식회사 이노지투비")
+AssertionError: '<!DOCTYPE html>\n<html>\n<head lang="en">\n    <meta charset="UTF-8">\n    <title>InnoMVA: \xec\xa3\xbc\xec\x8b\x9d\xed\x9a\x8c\xec\x82\xac \xec\x9d\xb4\xeb\x85\xb8\xec\xa7\x80\xed\x88\xac\xeb\xb9\x84</title>\n</head>\n<body>\n    <h2>InnoMVA: \xec\xa3\xbc\xec\x8b\x9d\xed\x9a\x8c\xec\x82\xac \xec\x9d\xb4\xeb\x85\xb8\xec\xa7\x80\xed\x88\xac\xeb\xb9\x84</h2>\n</body>\n</html>' != u'InnoMVA: \uc8fc\uc2dd\ud68c\uc0ac \uc774\ub178\uc9c0\ud22c\ube44'
+
+----------------------------------------------------------------------
+Ran 2 tests in 0.016s
+
+FAILED (failures=1)
+
+
+어어 예측 못한 에라가 발생했네...
+home.html에는 여러가지 tag가 붙어있어서 assertEqual은 적합하지 않다.
+
+$ vi app-test.py
+        - self.assertEqual(response.data, u"InnoMVA: 주식회사 이노지투비")
+        + self.assertIn(u"InnoMVA: 주식회사 이노지투비", response.data)
+
+(env)[base]21:30:27-cheon~/work/InnoMVA (master)$ python app-test.py
+..
+----------------------------------------------------------------------
+Ran 2 tests in 0.016s
+
+OK
+
+흠흠! 아주 좋군.
+그런데 한가지 이상한 점은 home.html이 templates 디렉토리 안에 있는데,
+flask는 신통하게 그걸 알아서 찾아오네, 난 아직 아무런 path정보를 만들어주지 않았는데 말이다.
+왜 그렇게 되는지는 차차 확인하기로 하자 아님 말고.
+
+아하! 이건 flask가 디폴트 templates 디렉토리를 사용한다고 문서에 나와 있다.
+
+이제 템플릿을 사용해서 홈피가 렌더링되니까 home.html을 원하는 만큼 예쁘게 만들면 되고!
+내가 애용하는 방법은 twitter bootstrap인데 디자이너 없이도 그럴듯한 홈피를 만들 수 있게 해준
+트위터 디자인팀에게 무한 감사하면서...
+다음 오류 테스트를 작성하자.
+다음 할 일은 home.html에 bootstrap을 입히는 것으로 한다.
+
+$ vi app-test.py
+from flask import url_for
+
+    def test_apply_css(self):
+        response = self.client.get(url_for('static', filename='custom.css'))
+        self.assertEqual(response.status_code, 200)
+
+(env)[base]22:17:52-cheon~/work/InnoMVA (master)$ python app-test.py
+F..
+======================================================================
+FAIL: test_apply_css (__main__.BasicTestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "app-test.py", line 27, in test_apply_css
+    self.assertEqual(response.status_code, 200)
+AssertionError: 404 != 200
+
+----------------------------------------------------------------------
+Ran 3 tests in 0.018s
+
+FAILED (failures=1)
+
+
+흠! 아직 static 디렉토리 설치하지 않았으므로 당연한 결과를
+flask는 디폴트로 static 디렉토리를 참조한다.
+
+$ mkdir static
+$ touch static/custom.css
+
+(env)[base]22:26:09-cheon~/work/InnoMVA (master)$ python app-test.py
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.020s
+
+OK
+
+
+이제 custom.css에 스타일시트를 정의하고 템플릿에서 사용하면 된다.
+그런데 bootstrap 하나만으로도 충분히 원하는 디자인이 가능하다.
+
+그러면 flask에서 bootstrap을 활용하기는 방법을 살펴보자.
+
+$ pip install flask-boostrap
+$ vi app.py
++ from flask.ext.bootstrap import Bootstrap
+[...]
++ bootstrap = Bootstrap(app)
+
+flask-bootstrap이 설치된 뒤에는 템플릿 파일에서 bootstrap css class를 사용하면 된다.
+home.html에 bootstrap class를 적용해 보기로 하자.
+
+(env)[base]22:37:32-cheon~/work/InnoMVA (master)$ cat templates/home.html
+{% extends "bootstrap/base.html" %}
+{% block title %}InnoMVA: 주식회사 이노지투비{% endblock %}
+{% block content %}
+    <div class="jumbotron">
+        <h2>InnoMVA: 주식회사 이노지투비</h2>
+    </div>
+{% endblock %}
+
+home.html의 내용을 위와 같이 바꾸고 테스트하면
+(env)[base]22:44:03-cheon~/work/InnoMVA (master)$ python app-test.py
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.027s
+
+OK
+
+오끼도끼 It's time to git!
+$ git diff *.py
+$ git commit -am "bootstrap 적용"
+
+
+
+
+
+
+
