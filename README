@@ -225,4 +225,11 @@ def index():
 여기다 어떻게 디자인을 입힌다냐?
 파이ㅌ선 코드에다 html을 입혀줄 디자이너는 몸값 겁~나 높...
 
+그래서 template을 활용해서 디자인과 코드를 분리해야 한다.
+우리가 사용하는 프레임웤은 flask이
+flask는 jinja2 template을 사용하고 있다.
+그래서 테스트도 flask에 좀더 적합한 flask-test를 사용하도록
+refactoring 하기로 한다.
+refactoring은 test가 성공한 상태에서 해야 하므로
+test Failure가 없는 지 확인하고 commit을 한 다음 refactoring을 하기로 한다.
 
