@@ -481,9 +481,24 @@ OK
 $ git diff *.py
 $ git commit -am "bootstrap 적용"
 
+잠깐 정리하면 이 웹앱을 구동하기 위해 설치된 패키지들이 뭐였지?
 
+(env)[base]22:47:28-cheon~/work/InnoMVA (master)$ pip freeze >requirements.txt
+(env)[base]22:50:50-cheon~/work/InnoMVA (master)$ cat requirements.txt
+Flask==0.10.1
+Flask-Bootstrap==3.2.0.2
+Flask-Testing==0.4.2
+Jinja2==2.7.3
+MarkupSafe==0.23
+Werkzeug==0.9.6
+argparse==1.2.1
+blinker==1.3
+itsdangerous==0.24
+wsgiref==0.1.2
 
+흠흠~ 뭐시지~ 뭔지도 모르겠다만 여하튼 현재까지 이런 패키지들이 설치되었다.
 
+reqirements.txt를 커밋하고 여기서 일단락 짓기로 한다.
 
 
 
