@@ -1,0 +1,127 @@
+지금부터 웹 프로그램을 맨땅에서 부터 시작하기로 한다.
+1. 먼저 웹을 구동시킬 전산 장비를 장만한다.
+    참고로 내 전산 환경은 다음과 같다
+    직원들이 쓰다가 느리다고 한쪽 구석에 쳐박아 놓은 펜티엄 1대(그래도 2코아)에 ubuntu14.04를 설치
+    실서버로는 아마존 EC2 micro instance(한국에는 아직 없고 일본 동경 사이트) 1년 무료 ubuntu14.04
+    이상 들어간 비용 $1 아마존에서 카드 인증시에 결제됨(이게 실제 지불해야하는 건지 환불되는 건지는 잘 모름)
+2. 로칼 서버에다가 개발 환경을 구축한다.
+    우분투14.04에는 Python 2.7과 3.4가 기본 깔려있는데 2.7을 사용하기로 한다.
+    편집기는 PyCharm3.4 Community Version(이것도 공짜... 대머리 까지것네 ㅋㅋ)
+    작업 디렉토리를 만들고 그리로 출근하자
+    $mkdir -p work/InnoMVA
+    $cd work/InnoMVA
+3. 첫번째 test를 작성한다.
+    $ touch app-test.py
+    [...]
+    $ python app-test.py
+Traceback (most recent call last):
+  File "app-test.py", line 2, in <module>
+    from app import app
+ImportError: No module named app
+
+    $ touch app.py
+    [...]
+    $ python app-test.py
+Traceback (most recent call last):
+  File "app-test.py", line 2, in <module>
+    from app import app
+  File "/home/cheon/work/InnoMVA/app.py", line 1, in <module>
+    from flask import Flask
+ImportError: No module named flask
+
+$ virtualenv env
+New python executable in env/bin/python
+Installing setuptools, pip...done.
+
+$ source env/bin/activate
+(env)[base]16:38:21-cheon~/work/InnoMVA$
+
+이제 python virtualenv 환경에 있다는 걸 알 수 있다.
+빠져나오는 방법은
+(env)[base]16:40:59-cheon~/work/InnoMVA$ deactivate
+[base]16:41:03-cheon~/work/InnoMVA$
+
+virtualenv에서 pip가 실행되는 지 확인하고
+(env)[base]16:41:48-cheon~/work/InnoMVA$ which pip
+/home/cheon/work/InnoMVA/env/bin/pip
+
+flask를 설치한다.
+(env)[base]16:41:54-cheon~/work/InnoMVA$ pip install flask
+
+그리고 다시 app-test를 실행시키면,
+(env)[base]16:44:32-cheon~/work/InnoMVA$ python app-test.py
+.
+----------------------------------------------------------------------
+Ran 1 test in 0.011s
+
+OK
+
+아싸! 성공이다.
+이 테스트로 이용자가 웹브라우져로 http://localhost:5000 에 접속하면
+우리가 작성한 코드가 정상적으로 작동해서,
+요구한 페이지를 가져왔다는 것(response.status_code==200)을 알 수 있다.
+
+그러나 아직 이 첫 페이지에는 아무런 내용도 없으므로 무언가 내용을 뿌려주는 테스트를
+만들어 일부러 Failure를 만든다.
+이것이 바로 Test Driven Development 의 핵심이니까...
+
+app-test.py
+
+          self.assertEqual(response.status_code, 200)
++         self.assertEqual(response.data, u"InnoMVA: 주식회사 이노지투비")
+
+(env)[base]16:45:43-cheon~/work/InnoMVA$ python app-test.py
+F
+======================================================================
+FAIL: test_landing_page (__main__.BasicTestCase)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "app-test.py", line 12, in test_landing_page
+    self.assertEqual(response.data, u"InnoMVA: 주식회사 이노지투비")
+AssertionError: 'Hello world!' != u'InnoMVA: \uc8fc\uc2dd\ud68c\uc0ac \uc774\ub178\uc9c0\ud22c\ube44'
+
+----------------------------------------------------------------------
+Ran 1 test in 0.012s
+
+FAILED (failures=1)
+
+헐? 아니 아싸! 이건 예상했던 오류기 때문에 아싸!
+참 잘했기 때문에 여기서 한바탕 쉬기 위해 버전관리를 하자.
+
+$ git init
+Initialized empty Git repository in /home/cheon/work/InnoMVA/.git/
+(env)[base]17:03:40-cheon~/work/InnoMVA (master)$
+
+env 디렉토리에는 python 프로그램이 들어있으므로 버전관리에서 제외한다.
+그리고 python compiled files *.pyc도 제외한다.
+(env)[base]17:06:04-cheon~/work/InnoMVA (master)$ vi .gitignore
+
++ env/*
++ *.pyc
++ .idea
+
+(env)[base]17:08:24-cheon~/work/InnoMVA (master)$ git add .
+(env)[base]17:08:28-cheon~/work/InnoMVA (master)$ git st
+On branch master
+
+Initial commit
+
+Changes to be committed:
+  (use "git rm --cached <file>..." to unstage)
+
+	new file:   .gitignore
+	new file:   .idea/.name
+	new file:   .idea/InnoMVA.iml
+	new file:   .idea/encodings.xml
+	new file:   .idea/misc.xml
+	new file:   .idea/modules.xml
+	new file:   .idea/scopes/scope_settings.xml
+	new file:   .idea/vcs.xml
+	new file:   .idea/workspace.xml
+	new file:   README
+	new file:   app-test.py
+	new file:   app.py
+
+(env)[base]17:08:30-cheon~/work/InnoMVA (master)$
+
+
