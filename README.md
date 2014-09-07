@@ -12,6 +12,7 @@
     $ mkdir -p work/InnoMVA
     $ cd work/InnoMVA
 3. 첫번째 test를 작성한다.
+4. 
     $ touch app-test.py
     [...]
     $ python app-test.py
