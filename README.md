@@ -8,8 +8,8 @@
     우분투14.04에는 Python 2.7과 3.4가 기본 깔려있는데 2.7을 사용하기로 한다.
     편집기는 PyCharm3.4 Community Version(이것도 공짜... 대머리 까지것네 ㅋㅋ)
     작업 디렉토리를 만들고 그리로 출근하자
-    $mkdir -p work/InnoMVA
-    $cd work/InnoMVA
+    $ mkdir -p work/InnoMVA
+    $ cd work/InnoMVA
 3. 첫번째 test를 작성한다.
     $ touch app-test.py
     [...]
