@@ -2,7 +2,7 @@ from tests_base import BaseTestCase
 from app.models import User
 from app import db
 
-class ModelsTestCase(BaseTestCase):
+class UserModelTestCase(BaseTestCase):
 
     def test_save_and_retrieve_user(self):
         user1 = User()
@@ -19,3 +19,22 @@ class ModelsTestCase(BaseTestCase):
         self.assertEqual(len(users), 2)
         self.assertEqual(users[0].userid, 'myid')
         self.assertEqual(users[1].userid, 'urid')
+
+    def test_password_setter(self):
+        u = User(password = 'hotdog')
+        self.assertTrue(u.password_hash is not None)
+
+    def test_no_password_get(self):
+        u = User(password = 'hotdog')
+        with self.assertRaises(AttributeError):
+            u.password
+
+    def test_password_verification(self):
+        u = User(password='hotdog')
+        self.assertTrue(u.verify_password('hotdog'))
+        self.assertFalse(u.verify_password('cooldog'))
+
+    def test_password_salts_random(self):
+        u1 = User(password='hotdog')
+        u2 = User(password='cooldog')
+        self.assertTrue(u1.password_hash != u2.password_hash)
