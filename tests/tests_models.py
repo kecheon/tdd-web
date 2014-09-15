@@ -1,7 +1,9 @@
 from tests_base import BaseTestCase
 from app.models import User
 from app import db
+from unittest import skip
 
+@skip
 class UserModelTestCase(BaseTestCase):
 
     def test_save_and_retrieve_user(self):

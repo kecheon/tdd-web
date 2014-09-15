@@ -1,7 +1,13 @@
 {% extends "bootstrap/base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
 {% block title %}InnoMVA: 주식회사 이노지투비{% endblock %}
 {% block content %}
-    <div class="jumbotron">
+    <div class="container text-center jumbotron">
         <h2>InnoMVA: 주식회사 이노지투비</h2>
+    </div>
+    <div class="container">
+        <div class="col-md-4">
+            {{ wtf.quick_form(form) }}
+        </div>
     </div>
 {% endblock %}

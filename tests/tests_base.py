@@ -1,8 +1,9 @@
 #-*-coding:utf8-*-
 from app import create_app, db
-from flask import Flask, template_rendered, url_for, current_app
+from flask import url_for, current_app
 import unittest
-from flask.ext.testing import TestCase
+
+from unittest import skip
 
 
 class BaseTestCase(unittest.TestCase):
