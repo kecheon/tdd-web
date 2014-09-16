@@ -3,8 +3,9 @@ __author__ = 'cheon'
 from tests_selenium_base import SeleniumTestCase
 from flask import request, render_template, url_for
 import re
+from unittest import skip
 
-
+# @skip
 class WebpageTestCase(SeleniumTestCase):
     def test_home_page(self):
         self.client.get('http://localhost:5000')
@@ -23,5 +24,14 @@ class WebpageTestCase(SeleniumTestCase):
         self.client.find_element_by_name('userid').send_keys('cheon')
         self.client.find_element_by_name('password').send_keys('password')
         self.client.find_element_by_name('submit').click()
-        error = self.client.find_element_by_css_selector('.has-error')
-        self.assertIn(u'없는 아이디입니다!', error.text)
+        # import pdb; pdb.set_trace()
+        # import time
+        # time.sleep(10)
+
+        error = None
+        try:
+            error = self.client.find_element_by_css_selector('.has-error')
+            self.assertIn(u'없는 아이디입니다!', error.text)
+        except:
+            # self.assertFalse(error == None, 'no element which has .has-error')
+            self.fail('no element which has .has-error')

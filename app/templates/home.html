@@ -6,8 +6,15 @@
         <h2>InnoMVA: 주식회사 이노지투비</h2>
     </div>
     <div class="container">
-        <div class="col-md-4">
-            {{ wtf.quick_form(form) }}
-        </div>
+        {% if user != None %}
+        <div>{{ userid }}님 안녕?</div>
+        {% else %}
+            <div class="col-md-4">
+                {{ wtf.quick_form(form) }}
+            </div>
+            <div class="has-error">
+                없는 아이디입니다!
+            </div>
+        {% endif %}
     </div>
 {% endblock %}
