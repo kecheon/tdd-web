@@ -28,6 +28,7 @@ class WebpageTestCase(SeleniumTestCase):
         # import time
         # time.sleep(10)
 
+
         error = None
         try:
             error = self.client.find_element_by_css_selector('.has-error')
@@ -35,3 +36,9 @@ class WebpageTestCase(SeleniumTestCase):
         except:
             # self.assertFalse(error == None, 'no element which has .has-error')
             self.fail('no element which has .has-error')
+
+    #그런 사람 없다 오류가 나서 회원가입을 한다.
+    def test_new_user_register(self):
+        self.assertIsNotNone(self.client.find_element_by_link_text(u'회원가입'))
+        # self.assertFalse(True, 'to make expected Failure')
+        pass
