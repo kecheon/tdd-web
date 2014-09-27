@@ -1,14 +1,14 @@
 # -*-coding:utf8-*-
 __author__ = 'cheon'
 
-from flask import render_template
-from . import main
+from flask import render_template, session, redirect, url_for
+from . import auth
 from ..models import User
-from app.auth.forms import LoginForm
+from forms import LoginForm
 
 
-@main.route('/', methods=['GET', 'POST'])
-def index():
+@auth.route('/login', methods=['GET', 'POST'])
+def login():
     userid = None
     password = None
     form = LoginForm()
@@ -25,15 +25,9 @@ def index():
         if not user:
             error = u'없는 아이디입니다!'
         # import pdb; pdb.set_trace()
-    return render_template('home.html', form=form, user=user, error=error)
+    return render_template('auth/login.html', form=form, user=user, error=error)
 
 
-@main.route('/shutdown')
-def server_shutdown():
-    if not current_app.testing:
-        abort(404)
-    shutdown = request.environ.get('werkzeug.server.shutdown')
-    if not shutdown:
-        abort(500)
-    shutdown()
-    return 'Shutting down...'
+@auth.route('/register')
+def register():
+    return render_template('auth/register.html')
