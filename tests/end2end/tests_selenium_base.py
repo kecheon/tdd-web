@@ -14,6 +14,7 @@ class SeleniumTestCase(unittest.TestCase):
     def setUpClass(cls):
         try:
             cls.client = webdriver.Firefox()
+            cls.implicitly_wait(3)
         except:
             pass
 

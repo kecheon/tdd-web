@@ -25,20 +25,29 @@ class WebpageTestCase(SeleniumTestCase):
         self.client.find_element_by_name('password').send_keys('password')
         self.client.find_element_by_name('submit').click()
         # import pdb; pdb.set_trace()
-        # import time
-        # time.sleep(10)
 
-
+        # id와 password을 입력하고 서밋하니 그런 아이디 없다고 한다.
         error = None
         try:
             error = self.client.find_element_by_css_selector('.has-error')
             self.assertIn(u'없는 아이디입니다!', error.text)
         except:
-            # self.assertFalse(error == None, 'no element which has .has-error')
+            self.assertFalse(error == None, 'no element which has .has-error')
             self.fail('no element which has .has-error')
+        form1 = None
+        form1 = self.client.find_elements_by_css_selector('.has-error')
+        print "hello %s" % form1
 
     #그런 사람 없다 오류가 나서 회원가입을 한다.
     def test_new_user_register(self):
+        self.client.get('http://localhost:5000')
         self.assertIsNotNone(self.client.find_element_by_link_text(u'회원가입'))
+        self.client.find_element_by_link_text(u'회원가입').click()
+        # 회원가입 양식이 나오고 아이디와 비번을 입력하고 전송한다.
+        # import time
+        # time.sleep(10)
+
+        # import pdb; pdb.set_trace()
+        # self.assertNotEqual(form, [])
+
         # self.assertFalse(True, 'to make expected Failure')
-        pass
