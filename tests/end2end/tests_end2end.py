@@ -34,18 +34,28 @@ class WebpageTestCase(SeleniumTestCase):
         except:
             self.assertFalse(error == None, 'no element which has .has-error')
             self.fail('no element which has .has-error')
-        form1 = None
-        form1 = self.client.find_elements_by_css_selector('.has-error')
-        print "hello %s" % form1
+
 
     #그런 사람 없다 오류가 나서 회원가입을 한다.
+    # @skip
     def test_new_user_register(self):
         self.client.get('http://localhost:5000')
         self.assertIsNotNone(self.client.find_element_by_link_text(u'회원가입'))
         self.client.find_element_by_link_text(u'회원가입').click()
-        # 회원가입 양식이 나오고 아이디와 비번을 입력하고 전송한다.
-        # import time
-        # time.sleep(10)
+        # 회원가입 양식이 나오고 email과 아이디와 비번을 입력하고 전송한다.
+
+        import time
+
+        self.client.find_element_by_name('email').send_keys('somebody@somewhere.com')
+        self.client.find_element_by_name('userid').send_keys('somebody')
+        self.client.find_element_by_name('password').send_keys('verysecret')
+        self.client.find_element_by_name('password2').send_keys('verysecret')
+        self.client.find_element_by_name('submit').click()
+        time.sleep(3)
+
+        message = self.client.find_element_by_css_selector('.alert')
+        self.assertTrue(re.search(u'로그인하시면 됩니다!', message.text))
+
 
         # import pdb; pdb.set_trace()
         # self.assertNotEqual(form, [])

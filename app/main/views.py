@@ -1,7 +1,7 @@
 # -*-coding:utf8-*-
 __author__ = 'cheon'
 
-from flask import render_template
+from flask import render_template, request, current_app, abort
 from . import main
 from ..models import User
 from app.auth.forms import LoginForm
@@ -30,6 +30,8 @@ def index():
 
 @main.route('/shutdown')
 def server_shutdown():
+    # import pdb; pdb.set_trace()
+
     if not current_app.testing:
         abort(404)
     shutdown = request.environ.get('werkzeug.server.shutdown')

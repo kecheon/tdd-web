@@ -6,4 +6,13 @@
             <h2>InnoMVA: 주식회사 이노지투비</h2>
         </div>
     {% endblock %}
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+
 {% endblock %}

@@ -2,6 +2,7 @@
 __author__ = 'cheon'
 
 import unittest
+import threading
 from selenium import webdriver
 
 from app import create_app, db
@@ -25,6 +26,7 @@ class SeleniumTestCase(unittest.TestCase):
 
             db.create_all()
             # User.generate_fake(10)
+            threading.Thread(target=cls.app.run).start()
 
     @classmethod
     def tearDownClass(cls):
