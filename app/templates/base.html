@@ -1,8 +1,24 @@
 {% extends "bootstrap/base.html" %}
 {% block title %}InnoMVA: 주식회사 이노지투비{% endblock %}
 {% block content %}
+    {% block navi_bar %}
+        <div class="container text-center">
+            <ul class="nav navbar-nav">
+                <li><a href="{{ url_for('main.index') }}">InnoMVA</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                {% if current_user.is_authenticated() %}
+                    <li><a href="{{ url_for('auth.logout') }}">로그아웃</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('auth.login') }}">로그인</a></li>
+                    <li><a href="{{ url_for('auth.register') }}">회원가입</a></li>
+                {% endif %}
+            </ul>
+        </div>
+
+    {% endblock %}
     {% block topbar %}
-        <div class="container text-center jumbotron">
+        <div class="container text-center well">
             <h2>InnoMVA: 주식회사 이노지투비</h2>
         </div>
     {% endblock %}

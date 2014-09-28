@@ -1,10 +1,7 @@
-{% extends "bootstrap/base.html" %}
+{% extends "base.html" %}
 {% import "bootstrap/wtf.html" as wtf %}
-{% block title %}InnoMVA: 주식회사 이노지투비{% endblock %}
 {% block content %}
-    <div class="container text-center jumbotron">
-        <h2>InnoMVA: 주식회사 이노지투비</h2>
-    </div>
+    {{ super() }}
     <div class="container">
         {% if user != None %}
             <div>{{ user.userid }}님 안녕?</div>
@@ -15,11 +12,6 @@
                 </div>
             </div>
             <div><a href="/auth/register">회원가입</a></div>
-            {% if error != None %}
-                <div class="has-error">
-                    {{ error }}
-                </div>
-            {% endif %}
         {% endif %}
     </div>
 {% endblock %}

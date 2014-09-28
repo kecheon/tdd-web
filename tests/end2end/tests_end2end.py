@@ -29,11 +29,11 @@ class WebpageTestCase(SeleniumTestCase):
         # id와 password을 입력하고 서밋하니 그런 아이디 없다고 한다.
         error = None
         try:
-            error = self.client.find_element_by_css_selector('.has-error')
+            error = self.client.find_element_by_css_selector('.alert')
             self.assertIn(u'없는 아이디입니다!', error.text)
         except:
-            self.assertFalse(error == None, 'no element which has .has-error')
-            self.fail('no element which has .has-error')
+            self.assertFalse(error == None, 'no element which has .alert')
+            self.fail('no element which has .alert')
 
 
     #그런 사람 없다 오류가 나서 회원가입을 한다.

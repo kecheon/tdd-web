@@ -20,6 +20,7 @@ class ViewsTestCase(BaseTestCase):
         #     print response.data
         #     self.assertTrue(False, u'no error message found!')
         data = response.get_data(as_text=True)
+        # import pdb; pdb.set_trace()
         self.assertTrue(re.search(expected_error, data))
         # self.assertTrue('You have not confirmed your account yet' in data)
         ## self.assertIn(expected_error, response.data)

@@ -24,9 +24,10 @@ def login():
         form.password.data = ''
         user = User.query.filter_by(userid=userid).first()
         if not user:
-            error = u'없는 아이디입니다!'
+            flash(u'없는 아이디입니다!')
         # import pdb; pdb.set_trace()
-    return render_template('auth/login.html', form=form, user=user, error=error)
+        #     return redirect(url_for('auth.login'))
+    return render_template('home.html', form=form, user=user)
 
 
 @auth.route('/register', methods=['GET', 'POST'])
