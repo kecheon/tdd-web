@@ -14,7 +14,7 @@
                     {{ wtf.quick_form(form) }}
                 </div>
             </div>
-            <div><a href="/auth/register">회원가입</a></div>
+            <div><a href="{{ url_for('auth.register') }}">회원가입</a></div>
             {% if error != None %}
                 <div class="has-error">
                     {{ error }}

@@ -4,7 +4,7 @@ __author__ = 'cheon'
 from flask import render_template, session, redirect, url_for
 from . import auth
 from ..models import User
-from forms import LoginForm
+from forms import LoginForm, RegistrationForm
 
 
 @auth.route('/login', methods=['GET', 'POST'])
@@ -28,6 +28,7 @@ def login():
     return render_template('auth/login.html', form=form, user=user, error=error)
 
 
-@auth.route('/register')
+@auth.route('/register', methods=['GET', 'POST'])
 def register():
-    return render_template('auth/register.html')
+    form = RegistrationForm()
+    return render_template('auth/register.html', form=form)
