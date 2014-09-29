@@ -3,12 +3,12 @@
 {% block content %}
     {{ super() }}
     <div class="container">
-        {% if user != None %}
-            <div>{{ user.userid }}님 안녕?</div>
+        {% if current_user != None %}
+            <div>{{ current_user.userid }}님 안녕?</div>
+            아직 준비된게 없습니다....
         {% else %}
             <div class="row">
                 <div class="col-md-4">
-                    {{ wtf.quick_form(form) }}
                 </div>
             </div>
             <div><a href="/auth/register">회원가입</a></div>

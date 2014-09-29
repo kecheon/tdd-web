@@ -12,7 +12,7 @@ class WebpageTestCase(SeleniumTestCase):
         self.assertTrue(re.search('InnoMVA', self.client.page_source))
 
     def test_login_view(self):
-        self.client.get('http://localhost:5000')
+        self.client.get('http://localhost:5000/auth/login')
 
         # 유저가 아이디와 비번 입력창을 보다.
         email_place = self.client.find_element_by_name('email')

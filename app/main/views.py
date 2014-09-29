@@ -5,27 +5,13 @@ from flask import render_template, request, current_app, abort, flash
 from . import main
 from ..models import User
 from app.auth.forms import LoginForm
+from flask.ext.login import logout_user, login_required
 
 
 @main.route('/', methods=['GET', 'POST'])
+@login_required
 def index():
-    userid = None
-    password = None
-    form = LoginForm()
-    user = None
-    error = None
-    # validate 성공하면 정상적으로 rendering
-    if form.validate_on_submit():
-        email = form.email.data
-        password = form.password.data
-        # 좀비가 생기면 안되니까
-        form.email.data = ''
-        form.password.data = ''
-        user = User.query.filter_by(email=email).first()
-        if not user:
-            flash(u'없는 아이디입니다!')
-        # import pdb; pdb.set_trace()
-    return render_template('home.html', form=form, user=user)
+    return render_template('home.html')
 
 
 @main.route('/shutdown')

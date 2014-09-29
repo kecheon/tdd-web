@@ -8,7 +8,7 @@ from ..models import User
 
 class LoginForm(Form):
     email = StringField(u'Email 주소', validators=[Required()])
-    password = StringField(u'비밀번호', validators=[Required()])
+    password = PasswordField(u'비밀번호', validators=[Required()])
     remember_me = BooleanField(u'ID저장')
     submit = SubmitField('확인')
 
