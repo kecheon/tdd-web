@@ -20,7 +20,7 @@ def login():
             login_user(user, form.remember_me.data)
         # import pdb; pdb.set_trace()
             return redirect(url_for('main.index'))
-    flash(u'없는 아이디입니다!')
+        flash(u'없는 아이디입니다!')
     return render_template('auth/login.html', form=form, user=user)
 
 

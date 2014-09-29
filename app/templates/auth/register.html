@@ -3,6 +3,12 @@
 {% block content %}
     {{ super() }}
      <div class="container">
-        {{ wtf.quick_form(form) }}
+        <h2>회원 가입</h2>
+        <div class="alert">
+             회원 가입을 위해 다음 내용을 작성해 주세요!
+        </div>
+        <div class="col-md-4">
+            {{ wtf.quick_form(form) }}
+        </div>
     </div>
 {% endblock %}
