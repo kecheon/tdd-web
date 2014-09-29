@@ -15,13 +15,13 @@ class WebpageTestCase(SeleniumTestCase):
         self.client.get('http://localhost:5000')
 
         # 유저가 아이디와 비번 입력창을 보다.
-        userid_place = self.client.find_element_by_name('userid')
+        email_place = self.client.find_element_by_name('email')
         password_place = self.client.find_element_by_name('password')
-        self.assertTrue(userid_place != None)
+        self.assertTrue(email_place != None)
         self.assertTrue(password_place != None)
 
         # 유저가 입력창에 아이디/비번을 입력하고 submit 버튼을 클릭한다.
-        self.client.find_element_by_name('userid').send_keys('cheon')
+        self.client.find_element_by_name('email').send_keys('somebody@somewhere.com')
         self.client.find_element_by_name('password').send_keys('password')
         self.client.find_element_by_name('submit').click()
         # import pdb; pdb.set_trace()

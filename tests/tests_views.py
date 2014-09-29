@@ -10,7 +10,9 @@ from unittest import skip
 
 class ViewsTestCase(BaseTestCase):
     def test_login_error_send_back(self):
-        response = self.client.post('/auth/login', data={'userid':'cheon', 'password':'password'})
+        response = self.client.post('/auth/login',
+                                    data={'email':'somebody@somewhere.com',
+                                                         'password':'password'})
         # import pdb; pdb.set_trace()
         # p dir(response)하면 속성을 다 리스팅할 수 있다.
         expected_error = u'없는 아이디입니다!'

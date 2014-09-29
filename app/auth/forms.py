@@ -7,9 +7,10 @@ from wtforms.validators import Required, Length, Email, Regexp, EqualTo
 from ..models import User
 
 class LoginForm(Form):
-    userid = StringField(u'아이디', validators=[Required()])
+    email = StringField(u'Email 주소', validators=[Required()])
     password = StringField(u'비밀번호', validators=[Required()])
-    submit = SubmitField('Submit')
+    remember_me = BooleanField(u'ID저장')
+    submit = SubmitField('확인')
 
 
 class RegistrationForm(Form):

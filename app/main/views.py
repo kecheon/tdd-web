@@ -16,12 +16,12 @@ def index():
     error = None
     # validate 성공하면 정상적으로 rendering
     if form.validate_on_submit():
-        userid = form.userid.data
+        email = form.email.data
         password = form.password.data
         # 좀비가 생기면 안되니까
-        form.userid.data = ''
+        form.email.data = ''
         form.password.data = ''
-        user = User.query.filter_by(userid=userid).first()
+        user = User.query.filter_by(email=email).first()
         if not user:
             flash(u'없는 아이디입니다!')
         # import pdb; pdb.set_trace()
