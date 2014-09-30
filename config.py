@@ -22,6 +22,10 @@ class TestingConfig(Config):
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = os.environ.get('TEST_DATABASE_URL') or \
         'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
+    SQLALCHEMY_BINDS = {
+        'innobid':'mysql://devel:roqkf@@@127.0.0.1/innobid?charset=utf8',
+        'innoMVA':'sqlite:///' + os.path.join(basedir, 'data-test.sqlite')
+    }
 
 config = {
     'development':DevelopmentConfig,

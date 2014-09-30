@@ -3,13 +3,28 @@
 {% block content %}
     {{ super() }}
     <div class="container">
-        {% if current_user != None %}
+        {% if current_user.is_authenticated() %}
             <div>{{ current_user.userid }}님 안녕?</div>
             아직 준비된게 없습니다....
         {% else %}
             <div class="row">
                 <div class="col-md-4">
+                    <div class="jumbotron">
+                        <b>이놈봐(InnoMVA)</b>는 이노지투비가 준비한 입찰 시뮬레이터입니다.
+                    </div>
                 </div>
+                <div class="col-md-4">
+                    <div class="jumbotron">
+                        지역, 면허, 발주처 별로 투찰 실험이 가능합니다.
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="jumbotron">
+                        (주)이노지투비의 입찰정보시스템을 이용하는 협력사들을 위해 만들어 졌습니.다
+                    </div>
+                </div>
+
+
             </div>
         {% endif %}
     </div>

@@ -17,14 +17,9 @@ class BaseTestCase(unittest.TestCase):
 
     def tearDown(self):
         db.session.remove()
-        db.drop_all()
+        db.drop_all(bind='innoMVA')
         self.app_context.pop()
 
-    # def create_app(self):
-    #
-    #     app = self.app
-    #     app.config['TESTING'] = True
-    #     return app
     def create_app(self):
         """must for TestCase
         """

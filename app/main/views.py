@@ -9,7 +9,7 @@ from flask.ext.login import logout_user, login_required
 
 
 @main.route('/', methods=['GET', 'POST'])
-@login_required
+# @login_required
 def index():
     return render_template('home.html')
 

@@ -5,7 +5,7 @@ from flask import request, render_template, url_for
 import re
 from unittest import skip
 
-# @skip
+@skip
 class WebpageTestCase(SeleniumTestCase):
     def test_home_page(self):
         self.client.get('http://localhost:5000')

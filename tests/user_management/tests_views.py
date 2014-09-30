@@ -2,10 +2,9 @@
 __author__ = 'cheon'
 
 import re
-from tests_base import BaseTestCase
+from tests.tests_base import BaseTestCase
 from app.models import User
 from app import db
-from unittest import skip
 
 
 class ViewsTestCase(BaseTestCase):

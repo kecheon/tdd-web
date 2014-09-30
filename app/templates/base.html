@@ -8,6 +8,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 {% if current_user.is_authenticated() %}
+                    <li><a href="#"> {{ current_user.userid }} 님! </a></li>
                     <li><a href="{{ url_for('auth.logout') }}">로그아웃</a></li>
                 {% else %}
                     <li><a href="{{ url_for('auth.login') }}">로그인</a></li>
