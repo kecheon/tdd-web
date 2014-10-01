@@ -2,6 +2,7 @@
 __author__ = 'cheon'
 
 import unittest
+from flask.ext.testing import TestCase
 import threading
 from selenium import webdriver
 
@@ -34,7 +35,7 @@ class SeleniumTestCase(unittest.TestCase):
             cls.client.get('http://localhost:5000/shutdown')
             cls.client.close()
 
-            db.drop_all()
+            db.drop_all(bind='innoMVA')
             db.session.remove()
 
             cls.app_context.pop()
